@@ -1,0 +1,387 @@
+:root {
+  --color1: #ede4d0;
+  --color2: pink;
+  --color3: #393b4b;
+  --color4: rgb(18, 19, 19);
+}
+/* Ci-dessus, on déclare des variables. On les commencent toujours par les 2 traits.
+Attention, il est préférable de dire "color2" plutôt que de nommer la variable "pink", cela évitera des problèmes futurs-- 
+On a mis des variables de couleurs mais ça aurait pu être autre chose. Désormais, chaque fois que l'on appelera notre variable, "color: var(--color1)", alors la balise ou l'élément prendront cette couleur.
+L'AVANTAGE des variables de couleurs, c'est que si je souhaite changer une couleur ou le thème de mon site, j'ai juste à remplacer les couleurs des variables */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* - NOTE 1 : Ici, on enlève toutes les marges et padding mises de base par chrome 
+   - NOTE 2 : on met toujours le box-sizing, onverra plus tard pourquoi, mais cela permet de mieux gérer le comportement des boîtes entre elles*/
+
+body {
+  background: url(./img/IMG_4021.jpg) center/cover;
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--color1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+/* - NOTE 1 : Le center/cover va permettre d'ajuster directement l'image à la taille du body 
+   - NOTE 2 : 100vh signifie que la photo doit toujours s'adapter à la taille verticale de la balise concernée. Ici, rien ne sera déformé, par contre cela va rogner dans la largeur
+   - NOTE 3 : overflow:hidden permet de cacher tout c e qui est en dehors du body et viter que le code se casse, ou rajoute des scroll bar quand des éléments sortent pour diverses raisons (comme fenêtre trop rétrécie, etc...Cela peut être utilisé pour n'importe quelle div, pas seulement le body */
+
+.card {
+  background: rgba(0, 0, 0, 0.497);
+  width: calc(100% - 50px);
+  padding: 20px 20px 6px;
+  box-shadow: 6px 12px 11px 0px rgba(0, 0, 0, 0.518);
+  border-radius: 5px;
+  backdrop-filter: blur(5px);
+}
+/* - NOTE 1 : Le calc dans la width nous permet de dire : je veux que le texte occupe 100% de la case, case qui occupera 50px de moins que la largeur de la page, soit 5px de marge à gauche et 25px de marge à droite (puisqu'on a centré l'élément au milieu de la page) 
+   - NOTE 2 : Pour la box-shadow,on peut très bien mettre les 3 premières valeurs à 0, puis moduler dans l'inspecteur du nav pour trouver son style 
+   - NOTE 3 : backdrop-filter permet de mettre un effet sur le fond derrière notre boîte (puisqu'on y a mis de la transparence), le blur est un effet de flou*/
+
+.card:before {
+  content: "\2729";
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 2.4rem;
+}
+
+/* - NOTE 1 : Les before et les after permettent d'ajouter une balise HTML au début ou à la fin de notre boîte CSS (ici dans notre class "card"). Mais on peut tout de même changer la position en la basculant en absolute.
+   - NOTE 2 : Ce type de notation "maClass:method" s'appelle une pseudo class 
+   - NOTE 3 : Le /2730 vient d'un site HTML Symbols pour faire une étoile. On peut changer la taille police comme avec une font classique (font-size), même s'il s'agit d'un code, le symbole s'assimile tout de même à un caractère de font. */
+
+h1 {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+h1::after {
+  content: "";
+  position: absolute;
+  background: var(--color1);
+  height: 1px;
+  width: 100%;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  animation: h1anim 10s ease-in-out forwards;
+  transform-origin: left;
+}
+/* !! ATTENTION !! :  Pour créer une barre horinzontale, il va falloir absolument 2 conditions : 1.Un "content" doit etre présent, même vide. 2. Il faut mettre la position en "absolute"
+    - NOTE 1 : Ici on choisit un after car on souhaite mettre le barre après le titre h1
+    - NOTE 2 : Pour colorer la barre, on va utiliser background 
+    - NOTE 3 : Il faut ensuite placer la barre au bon endroit, et pour cela on va devoir mettre des FRONTIERES, comme tout objet en absolute. Pour mettre une frontière, il faurt que son parent soit en position "relative". On peut alors mettre bottom:-10px pour lui dire de se mettre en dessous du titre de 10px
+    - NOTE 4 : le left:50% permet de centrer la barre au milieu de la page (donc à 50% de la largeur). Mais il ne faiut pas oublier qu'un élément se centre par son coin haut gauche (et non par son centre). On finit donc par ajouter transform:translateX(-50%) pour que l'élément se décale de 50% par apport à lui-même (et ainsi manopuler l'élément par son centre et non plus par son coin gauche)
+    - NOTE 5 : la scaleX(0) permet juste de cacher la barre dans le but d'une animation
+    - NOTE 6 : la ligne animation permet de donner un nom à l'animation que l'on va faire (ci-dessous), on y ajoute la durée et le type d'aniamtion voulue.ease-in-out signifie début lent, puis accélaration, puis fin lente. 
+    - NOTE 7 : pour ne pas que la barre disparaisse à la fin de son animation, il faut ajouter "forwards" pour que le résultat reste
+    - NOTE 8 : trnasform-origin permet de choisir de quel endroit vient l'animation. Sinon de base l'animation se fera par le centre
+  */
+
+@keyframes h1anim {
+  100% {
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+/* - NOTE 1 : h1anim est le nom que l'on a donné plus haut pour notre animation
+   - NOTE 2 : Le 100% signifie que l'on part de l'état entier de h1anim
+   - NOTE 3 : ATTENTION, à partir du moment où on touche un paramètre (ici on veut changer scaleX() notre animation va écraser toute la ligne du paramètre choisi. Il va donc falloir remettre le transform:translateX(-50%) qui se retrouve aussi écrasé, puisque sur la même ligne que le paramètre scale */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 20% 80%;
+}
+/* Comme vu dans le CSS part 1, le gtc permet de répartir horizontalement les 2 enfants du grid-container, en les mettant en 2 colonnes et précisant aves les % l'espace que chaque colonne va utiliser sur la largeur de notre boîte. */
+
+.polygon-container {
+  filter: drop-shadow(-1px 6px 3px var(--color2));
+  place-self: center left;
+}
+/* - NOTE 1 : Ici la méthode pour pouvoir mettre une ombre à une forme polygonale de div (donc dès qu'on choisie une forme autre que le rectangle de base des div habituel)
+   - NOTE 2 : le place-self permet que l'ombre aussi soit centrée */
+
+.polygon {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: linear-gradient(135deg, var(--color1) 0%, var(--color3) 100%);
+  height: 100px;
+  width: 100px;
+}
+/* - NOTE 1 : la forme de clip-path a été générée et copiée sur le site bennettfeely
+   - NOTE 2 : Le gradient peut-être généré et copié sur le site CSS Gradient
+   - NOTE 3 : Dans notre exemple, on a remplacé les couleurs du gradient par nos variables de couleur afin de respecter notre thème 
+   - NOTE 4 : pour ajouter une ombre à ce polygon, cela devient compliqué, la méthode se trouve dans polygon-container, car il faut passer par le parent */
+
+.polygon:after {
+  content: "un texte";
+  position: absolute;
+  color: var(--color2);
+  background: var(--color3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(332deg);
+  width: 90px;
+  padding: 4px;
+  text-align: center;
+}
+/* NOTE 1 : notre boite se positionne toujours en fonction de son coin haut gauche. Pour pouvoir le positionner par rapport à son centre, on utilise transform (-50%, -50%). De cette manière, les positions qu'on lui donne par la suite, déplaceront la boîte en attrapant son centre et non son coin 
+   - NOTE 2 : le rotate permet d'orienter différemment le texte (ou autre élément). Une fois créé, il sera + pratique de l'utiliser via l'inspecteur de navigateur 
+   - NOTE 3 : ATTENTION : avec les before et after, il faut souvent, sur la pge web, recliquer sur l'élément et faire "inspecter" pour actualiser l'inspecteur de navigateur */
+
+p {
+  line-height: 26px;
+  margin: 20px 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  text-align: justify;
+}
+/* - NOTE 1 : le line-height pour choisiur l'espacement entre les lignes de texte 
+   - NOTE 2 : le "display: -webkit-box" permet d'avoir et d'activer les methods de webkit 
+   - NOTE 3 : le -webkit-box-orient et -webkit-line-clam nous indiquent ici que l'on souhaite que la box ne contienne que les 4 premières lignes de notre texte (dans un 1er temps, ça va casser puisqu'on aura 4 lignes dans la box puis le reste sous la box)
+   - NOTE 4 : on ajouter alors le overflow pour cacher tout ce qui dépasse de la boîte (les "..." apparaissent en fin de texte) 
+   - NOTE 5 : "text-align:justify" fonctionne comme dans Word pour jsutifier le texte */
+
+p::selection {
+  background: var(--color2);
+  color: var(--color3);
+}
+/* - NOTE 1 : Cette method permet de changer la couleur de la sélection de texte. On sera souvent aussi amené à changer la couleur du texte au moment de la sélection
+   - NOTE 2 : Pour être + pro, il faut continuer à utiliser les couleurs déclarées de notre thème
+   - NOTE 3 : ATTENTION ! il y a bien "::" entre "p" et "selection" */
+
+.checkbox-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0 30px;
+  perspective: 40px;
+}
+/* - NOTE : la perspective est prévue pour faire de la 3D en animation, plus bas dans le code (voir label:nth-child()) */
+
+input[type="checkbox"] {
+  display: none;
+}
+/* Ci-dessus on ne veut pas que la case checkbox existe, on préférera cliquer sur le mot "option"*/
+
+input[type="checkbox"]:checked + label {
+  background: green;
+  transform: scale(1.1);
+  filter: brightness(120%);
+}
+/* - NOTE 1 : quand on met "+" debant label, cela signifie que lorsque la checkbox est cochée, l'action ne concernera que le label auquel elle est affectée. 
+    Si j'avais voulu une action qui concerne tous les labels, il faudrait remplacer le "+" par "~"
+   - NOTE 2 : Ci-dessus on indique ensuite qu'au click sur la check-box, le fond du label devient vert 
+   - NOTE 3 : le scale est la taille générale de notre label
+   - NOTE 4 : filter permet totu un tas de style. Sur le site CSSgenerator.org en catégorie filter, on peut récupérer et tester tout un tas d'effets */
+
+label {
+  cursor: pointer;
+  border: 2px solid white;
+  background: var(--color2);
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  transition: 0.2s;
+  user-select: none;
+}
+/* - NOTE 1 : le cursor:pointer permet de transformer le curseur en main pour indiquer à l'utilisateur que c'est clickable 
+   - NOTE 2 : "user-select:none" permet d'empêcher l'utilisateur de pouvoir faire une selection sur ce qui est écrit. Comme il s'agit d'un bouton (ou plutôt d'un élément clickable) cela pourrait créer des conflits dans certains cas. */
+
+label:first-of-type:hover {
+  animation: label1 1s;
+}
+@keyframes label1 {
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* - NOTE 1 : "first-of-type" signifie le premier élément de ce type rencontré (en loccurence, ici, au premier "label"
+   - NOTE 2 : "hover" pour dire que l'animation se fait en passant la souris sur le label 
+   - NOTE 3 : "50%" signifie qu'à 50% de l'animation (qui dure 1seconde comme on l'a précisé plus haut), alors on gonfle de 1,4 la taille du label
+   - NOTE 4 : "100%" signifie qu'à la fin de l'animation (donc à 100% de la durée de 1 seconde), on revient à la taille initiale ( avec scale(1))*/
+
+label:nth-child(4):hover {
+  animation: label2 3s infinite linear;
+}
+@keyframes label2 {
+  33% {
+    transform: translateZ(30px);
+  }
+  66% {
+    transform: translateZ(-40px);
+  }
+  100% {
+    transform: translateZ(0);
+  }
+}
+/* - NOTE 1: label:nth-child(4) signifie le 4ème label de la page.
+   - NOTE 2 : On donne un nom à cetta animaiton, ici "label2" 
+   - NOTE 3 : ATTENTION !! Pour faire de la 3D, il ne faut pas oublier la perspective sur le parent (dans notre exemple, le parent de notre label est "check-container" 
+   - NOTE 4 : "linear" pour avoir un mouvement régulier 
+   - NOTE 5 : "infinite" signifie que l'animation se répétera à chaque fois qu'on passera la souris dessus (puisqu'on a choisi que l'animation se fasse lorsque la souris passe dessus)*/
+
+.e-mail {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.e-mail input {
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 3px solid transparent;
+  transition: 0.3s;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color3);
+  width: 35%;
+  min-width: 180px;
+  max-width: 300px;
+}
+/* - NOTE 1 : Concernant notre input de text, on a d'abord donné un pourcentage pour rendre la case dynamique si on rétrécit ou agrandit la fenêtre.
+Mais ensuite, on doit donner un minimum et un maximum de largeur, pour garder un confort d'écriture si la fenêtre est très petite ou très grande.
+   - NOTE 2 : la border est transparente pour le moment. A quoi cela sert ? Ci-dessous, on va faire un focus, c'est-à-dire qu'en travaillant dans la fenêtre, on va créer un style. On a choisi une bordure de 3px. Pour ne pas que ça se déforme lorsque la bordure va apparaître, on va déjà mettre une bordure invisible, ainsi, la case de texte ne sera pas modifiée à cause de l'apparaition du bord. */
+
+input[type="text"]:focus {
+  background: transparent;
+  border: 3px solid var(--color2);
+  border-radius: 50px;
+}
+/* La méthode focus permet d'agir lorsqu'on est focus sur lélément choisi, ce qui signifie lorsque l'on clique dessus, lorsque l'on sélectionne, lorsque l'on écrit à l'intérieur, etc... */
+
+input[type="text"]::placeholder {
+  color: var(--color2);
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+/* Ici juste pour montrer que l'on peut mettre dy style aussi sur le placeholder (=le texte dans la case d'un formulaire) */
+
+button {
+  cursor: pointer;
+  background: var(--color2);
+  border: none;
+  font-size: 1.3rem;
+  padding: 10px 20px;
+  border-radius: 150px;
+  margin: 0 auto;
+  display: block;
+  transition: 0.4s;
+}
+/* - NOTE 1 : on a choisi "display:block" car de base le navigateur met les boutons en "inline-block" ce qui signifie que le bouton est centré dans une zone qui correspond à sa propre taille. Si on veut le centrer sur la page, il faut donc le passer en "block", ce qui signifie que sa zone correspond à toute la ligne de la page. Ainsi, margin le centrera en fontion de toute la largeur de la page et non juste la largeur du bouton. On a souvent des problèmes de ce type lrosque l'on n'est pas en block. 
+   - NOTE 2 : la transisiton se met toujours dans l'élément principal, et non dans la pseudo-class qui va faire l'effet */
+
+button:hover {
+  letter-spacing: 3px;
+}
+/* Ici on propose que les lettres s'écartent au passage de la souris sur le bouton */
+
+button:hover + a,
+a:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+/* - NOTE 1 : Ici, avec "button:hover + a", on va faire passer l'opacité du lien des conditions générales de 0.4 à 1 en passant la souris sur le bouton valider (et également faire remonter le lien de quelques pixels). 
+   - NOTE 2 : Mais en ayant rajouté "a:hover", on indique qu'il se passera la même chose en passant le curseur sur le lien. Autrement, on ne pourrait jamais cliquer dessus puisqu'il n'apparaitrait que lrosque le curseur est sur "valider" 
+   - NOTE 3 = visibility:visible pour passer de l'état invisible à visible */
+
+button:active {
+  transform: scale(1.2);
+}
+/* "active" signifie une action qui ne dire que pendant la durée du click enfoncé
+TRES IMPORTANT : cela permet de montrer à l'utilisateur qu'il s'est passé qqch sur son bouton. Il faut en mettre sur toutes les actions. 
+   Dans notre exemple, on a juste fait grossir le bouton pendant le click */
+
+a {
+  color: var(--color1);
+  text-align: center;
+  display: block;
+  opacity: 0.4;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: 0.3s;
+}
+/* - NOTE 1 : Ici on change la couleur de l'hyperlien (pour éviter le bleu de base) 
+   - NOTE 2 : comme pour le bouton, il faut le mettre en "display:block" pour que la nbalise cocnerne toute la largeur de la page, et ainsi bien mettre au centre notre texte quand on fera le tac
+   - NOTE 3 : on le met en "visibility" hidden pour ne pas qu'on puisse voir l'élément avant qu'on le révèle par le hover (+ haut dans le CSS) */
+
+a:visited {
+  color: var(--color2);
+}
+/* On peut changer la couleur du lien s'il a déjà été visité (pour ne pas qu'il devienne violet) */
+
+img {
+  height: 40px;
+  position: absolute;
+  filter: drop-shadow(0px 6px 3px rgba(255, 255, 0, 0.6));
+  z-index: -1;
+  animation: spaceship 6s linear;
+  /* animation: spaceship 6s infinite linear; 
+  j'enlève le "infinite" pour ne pas faire souffler mon ordi mais sur un site classqiue il faudrait le remettre pour que l'animation continue */
+}
+/* - NOTE 1 : on doit mettre l'image du vaisseau en absolute, car il appartient à un parent (contenant un autre enfant), il doit donc se positionner par rapport à son parent et non par rapport à toute la page, d'où le besoin de le mettre en absolute. 
+   - NOTE 2 : drop-shadow permet de mettre l'ombre jaune autour du vaisseau
+   - NOTE 3 : le z-index est une position par rapport à d'autres éléments. On les met en positif et en négatif, on est libre de mettre les chiffres que l'on souhaite, pas besoin qu'ils soient consécutifs entre eux */
+
+@keyframes spaceship {
+  0% {
+    top: 2%;
+    left: 2%;
+    transform: rotate(90deg);
+  }
+  10% {
+    top: 6%;
+    left: 30%;
+    transform: rotate(95deg);
+  }
+  20% {
+    top: 9%;
+    left: 60%;
+    transform: rotate(60deg);
+  }
+  30% {
+    top: 0%;
+    left: 80%;
+    transform: rotate(110deg);
+  }
+  50% {
+    top: 50%;
+    left: 80%;
+    transform: rotate(323deg);
+  }
+  60% {
+    top: 90%;
+    left: 90%;
+    transform: rotate(256deg);
+  }
+  70% {
+    top: 110%;
+    left: 50%;
+    transform: rotate(237deg);
+    /* nb : on met 110% pour le faire sortir de la page momentanément */
+  }
+  80% {
+    top: 85%;
+    left: 30%;
+    transform: rotate(323deg);
+  }
+  90% {
+    top: 50%;
+    left: 15%;
+    transform: rotate(350deg);
+  }
+  100% {
+    top: 2%;
+    left: 2%;
+    transform: rotate(90deg);
+  }
+}
+/* NOTE : Pour trouver la bonne orientation du vaisseau, le mieux est d'utiliser l'inspecteur de navigateur, et d'arrêter l'animation à chaque changement de direction pour directement agir sur le rotate dans l'inspecteur 
+-->> IMPORTANT !! Dans l'inspecteur de navigateur, on clique sur les 3 poitns verticaux puis sur "more tools" et on choisit "animations. Cet outil va nous permettre de choisir la vitesse de l'animation mais aussi de faire des pauses pour pouvoir gérer, par exemple, le changement d'orientation avec le rotate */
